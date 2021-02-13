@@ -1,75 +1,7 @@
-import { useState } from 'react';
 import './App.scss';
-import { Dialog } from '@reach/dialog';
-import '@reach/dialog/styles.css';
 import { useLocalStorageState } from './useLocalStorageHook';
-
-function AddNewUser(props) {
-  const [showDialog, setShowDialog] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [userRating, setUserRating] = useState(1);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
-
-  const handleSave = () => {
-    if (userName !== '' && userName !== null && userRating !== 0) {
-      props.onSave(userName, userRating);
-      setUserName('');
-      setUserRating(0);
-      close();
-    } else {
-      alert('Please provide username and rating both');
-    }
-  };
-
-  return (
-    <div style={props.additionalStyles}>
-      <button onClick={open}>Add New</button>
-      <Dialog isOpen={showDialog} onDismiss={close}>
-        <h2>Add User</h2>
-        <label htmlFor="userName">userName: </label>
-        <input
-          type="text"
-          id="userName"
-          value={userName}
-          onChange={(e) => setUserName(e.currentTarget.value)}
-        />
-        <div
-          style={{ display: 'flex', direction: 'column', marginTop: '20px' }}
-        >
-          <p style={{ marginTop: '6px' }}>rating</p>
-          <Rating star={userRating} setRating={setUserRating} />
-        </div>
-        <button onClick={close}>Cancel</button>
-        <button onClick={handleSave}>Save</button>
-      </Dialog>
-    </div>
-  );
-}
-
-export const Rating = ({ star = 1, name = '', setRating, style = {} }) => {
-  var stars = [];
-
-  for (let i = 1; i < 6; i++) {
-    var klass = 'star-rating__star';
-
-    if (star >= i && star != null) {
-      klass += ' is-selected';
-    }
-
-    stars.push(
-      <label className={klass} onClick={() => setRating(i, name)}>
-        ★
-      </label>
-    );
-  }
-
-  return (
-    <div className="star-rating" {...style}>
-      {stars} {name}
-    </div>
-  );
-};
+import { Rating } from './Rating';
+import { AddNewUser } from './AddNewUserForm';
 
 export default function App() {
   const [sort, setSort] = useLocalStorageState('direction', 'desc');
@@ -134,7 +66,14 @@ export default function App() {
   return (
     <div className="App">
       <h2>Star rating component</h2>
-      <div style={{ display: 'flex', flexDirection: 'row', backgroundColor:"lightGrey", padding: "10px" }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          backgroundColor: 'lightGrey',
+          padding: '10px',
+        }}
+      >
         <div>sort by: </div>
         <div>
           <label>
