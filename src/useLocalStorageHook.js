@@ -1,5 +1,6 @@
 import React from "react";
 
+// we don't need serialization as of now but it's an additional functionality
 export function useLocalStorageState(
   key,
   defaultValue = "",
